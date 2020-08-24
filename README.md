@@ -1,2 +1,2 @@
 # ngo-directory-frontend
-View Layer of the NGO Directory App
+View Layer of the NGO Directory App test
