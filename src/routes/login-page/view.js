@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function Pricing() {
+export default function Login() {
   const classes = useStyles();
 
   return (
