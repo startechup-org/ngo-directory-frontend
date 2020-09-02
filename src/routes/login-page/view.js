@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +12,8 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
+
+import { user_login } from '../../api/user.api'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,6 +39,41 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
 
+  /* States */
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  /* API Methods */
+  const login = async () => {
+    try {
+      const response = await user_login({
+        email,
+        password,
+      });
+      /* 
+        User Credentials
+          {
+            "email": "ccredo@startechup.com",
+            "password": "P@ssword01"
+          } 
+      */
+      console.log(response)
+    } catch (err) {
+      console.log('err login: ', err)
+    }
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    console.log('form: ', form)
+    if (form.checkValidity() === false) {
+        event.stopPropagation();
+    } else {
+        login()
+    }
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -48,7 +85,15 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={login}
+            > Test </Button>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -59,6 +104,8 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -70,6 +117,8 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -86,12 +135,7 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
