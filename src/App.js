@@ -5,7 +5,7 @@ import Header from './components/header/index';
 import LoginPage from './routes/login-page/view'
 import SignUpPage from './routes/signup-page/view'
 import NgoListPage from './routes/ngo-list-page/view'
-import AdminDashboard from './routes/admin-dashboard/view'
+import AdminDashboard from './routes/admin-dashboard-page/view'
 
 function App() {
   return (
