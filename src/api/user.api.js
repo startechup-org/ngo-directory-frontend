@@ -1,18 +1,23 @@
 import api from '../resources/api';
 
- export function user_login(body) { 
-    return api.post('/user/login/', body);
+ export function user_login(data) { 
+    return api.post('/user/login/', data);
 }
 
-// export function generateAccountProfile() {
-//     const headers = {Authorization: `Bearer ${getAuthToken()}`};
-//     return axiosInstance.get("generate-personal-patient", {headers});
-// }
+export function user_signup(data) {
+    return api.post('/user/', data);
+}
 
-// import {profile,generateAccountProfile} from "../../services/account.service";
+/*
 
-// generateAccountProfile().then(res => {
-//     this.getAccountProfile()
-// }).catch(err => {
-//     this.$Message.error("Failed to get profile");
-// });
+{
+	"username": "TEST123",
+	"name": "test123 Credo",
+	"email": "test123@cleo.com",
+	"password": "pass123",
+	"language": "English",
+	"country": "Philippines",
+	"userType": "ngo_admin"
+}
+
+*/
