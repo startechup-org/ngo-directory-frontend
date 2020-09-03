@@ -85,14 +85,6 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={login}
-            > Test </Button>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
@@ -133,8 +125,8 @@ export default function Login() {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
+            <Grid container justify="flex-end">
+              <Grid item>
                 <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
