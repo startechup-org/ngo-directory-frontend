@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import PrivateRoute from './routes/private-route/view'
+
 import Header from './components/header/index';
 import Footer from './components/footer/index'
 import LoginPage from './routes/login-page/view'
@@ -14,7 +16,10 @@ function App() {
       <Header />
       <Switch>
         <Route path="/admin" component={AdminDashboard} />
-        <Route path="/list" component={NgoListPage} />
+        <PrivateRoute path="/list">
+          <NgoListPage />
+        </PrivateRoute>
+        {/* <Route path="/list" component={NgoListPage} /> */}
         <Route path="/signup" component={SignUpPage} />
         <Route path="/" component={LoginPage} />
       </Switch>
