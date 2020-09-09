@@ -60,8 +60,10 @@ export default function Login() {
           } 
       */
       console.log(response)
+      console.log('user_id: ', response.data.user._id)
       localStorage.setItem('ngodirectory_auth', JSON.stringify(response.data));
       localStorage.setItem('login_timestamp', (new Date().getTime()).toString())
+      localStorage.setItem('user_id', response.data.user._id)
       history.push('/list')
 
     } catch (err) {
