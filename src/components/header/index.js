@@ -6,6 +6,8 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
+import Logo from '../../images/Logo.svg'
+
 const useStyles = makeStyles((theme) => ({
     '@global': {
       ul: {
@@ -35,22 +37,24 @@ export default function Pricing() {
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
             <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-                Company name
+              <img src={Logo} /> 
             </Typography>
             <nav>
                 <Link variant="button" color="textPrimary" href="#" className={classes.link}>
-                Features
+                User List
                 </Link>
                 <Link variant="button" color="textPrimary" href="#" className={classes.link}>
-                Enterprise
-                </Link>
-                <Link variant="button" color="textPrimary" href="#" className={classes.link}>
-                Support
+                NGO List
                 </Link>
             </nav>
             <Button href="#" color="primary" variant="outlined" className={classes.link}>
                 Login
             </Button>
+            <nav>
+                <Link variant="button" color="textPrimary" href="#" className={classes.link}>
+                FR
+                </Link>
+            </nav>
             </Toolbar>
         </AppBar>
     )
