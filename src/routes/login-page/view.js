@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
+  let history = useHistory();
 
   /* States */
   const [email, setEmail] = useState('')
@@ -60,6 +62,8 @@ export default function Login() {
       console.log(response)
       localStorage.setItem('ngodirectory_auth', JSON.stringify(response.data));
       localStorage.setItem('login_timestamp', (new Date().getTime()).toString())
+      history.push('/list')
+
     } catch (err) {
       console.log('err login: ', err)
     }
