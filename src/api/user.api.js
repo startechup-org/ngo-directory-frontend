@@ -1,4 +1,4 @@
-import api from '../resources/api';
+import api from 'utils/api';
 
  export function user_login(data) { 
     return api.post('/user/login/', data);

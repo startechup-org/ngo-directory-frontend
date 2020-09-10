@@ -1,27 +1,29 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 
-import PrivateRoute from './routes/private-route/view'
+import Header from "components/Header";
+import Footer from "components/Footer";
+import LoginPage from "views/Login";
+import SignUpPage from "views/SignUp";
+import NgoListPage from "views/NGOList";
+import AdminDashboard from "views/AdminDashboard";
 
-import Header from './components/header/index';
-import Footer from './components/footer/index'
-import LoginPage from './routes/login-page/view'
-import SignUpPage from './routes/signup-page/view'
-import NgoListPage from './routes/ngo-list-page/view'
-import AdminDashboard from './routes/admin-dashboard-page/view'
+import { PrivateRoute, PublicRoute } from "./views";
 
 function App() {
   return (
     <Router>
       <Header />
       <Switch>
-        <Route path="/admin" component={AdminDashboard} />
-        <PrivateRoute path="/list">
-          <NgoListPage />
-        </PrivateRoute>
-        {/* <Route path="/list" component={NgoListPage} /> */}
-        <Route path="/signup" component={SignUpPage} />
-        <Route path="/" component={LoginPage} />
+        <PublicRoute path="/admin" component={AdminDashboard} exact />
+        <PrivateRoute path="/list" component={NgoListPage} exact />
+        <PublicRoute
+          path="/signup"
+          component={SignUpPage}
+          restricted="true"
+          exact
+        />
+        <PublicRoute path="/" component={LoginPage} restricted="true" exact />
       </Switch>
       <Footer />
     </Router>

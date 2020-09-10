@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -59,13 +59,13 @@ export default function Login() {
             "password": "P@ssword01"
           } 
       */
+      
       console.log(response)
       console.log('user_id: ', response.data.user._id)
       localStorage.setItem('ngodirectory_auth', JSON.stringify(response.data));
       localStorage.setItem('login_timestamp', (new Date().getTime()).toString())
       localStorage.setItem('user_id', response.data.user._id)
       history.push('/list')
-
     } catch (err) {
       console.log('err login: ', err)
     }
