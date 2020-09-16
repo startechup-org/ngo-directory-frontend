@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -10,18 +10,34 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewOrganization from "./ViewOrganization"
+import EditOrganization from "./EditOrganization"
 
 const OrganizationCard = (card) => {
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(false);
+  const [openViewDialog, setOpenViewDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [chosenOrg, setChosenOrg] = useState('')
 
-	const handleClickOpen = () => {
-	  setOpen(true);
+  const handleClickOpen = (data) => {
+    if (data.modalType === "view") {
+      setOpenViewDialog(true);
+      setChosenOrg(data.id)
+    }
+    
+    if (data.modalType === "edit") {
+      setOpenEditDialog(true);
+    }
 	};
   
-  const handleClose = () => {
-	  setOpen(false);
+  const handleClose = (modalType) => {
+    if (modalType === "view") {
+      setOpenViewDialog(false);
+    }
+    
+    if (modalType === "edit") {
+      setOpenEditDialog(false);
+    }
 	};
 
   return (
@@ -35,21 +51,22 @@ const OrganizationCard = (card) => {
           />
           <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="h5" component="h2">
-              {card.org_name}
+              {card.card.org_name}
             </Typography>
-            <Typography>{card.org_description}</Typography>
+            <Typography>{card.card.org_description}</Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" color="primary" onClick={handleClickOpen}>
+            <Button size="small" color="primary" onClick={() => handleClickOpen({"modalType": "view", "id": card.card._id})}>
               View
             </Button>
-            <Button size="small" color="primary">
+            <Button size="small" color="primary" onClick={() => handleClickOpen({"modalType:": "edit" })}>
               Edit
             </Button>
           </CardActions>
         </Card>
       </Grid>
-      <ViewOrganization open={open} close={handleClose} aria-labelledby="form-dialog-title"/>
+      {chosenOrg && <ViewOrganization open={openViewDialog} close={() => handleClose("view")} aria-labelledby="form-dialog-title" org_id={chosenOrg} />}
+      <EditOrganization open={openEditDialog} close={() => handleClose("edit")} aria-labelledby="form-dialog-title"/>
     </>
    
   );

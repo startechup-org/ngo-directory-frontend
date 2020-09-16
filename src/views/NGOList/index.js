@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import Container from '@material-ui/core/Container';
 import OrganizationGrid from './OrganizationGrid';
 
 import { managedOrganizationsByUser } from '../../api/user.api';
 import { allOrganizations } from '../../api/organization.api';
+import AddOrganization from "./AddOrganization"
 
 export default function Album() {
 	const classes = useStyles();
@@ -15,11 +18,21 @@ export default function Album() {
 	const [organizations, setOrganizations] = useState([]);
 	const [managedOrganizations, setManagedOrganizations] = useState([]);
 
+	const [open, setOpen] = useState(false);
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	}
+
+	const handleClose = () => {
+		setOpen(false);
+	}
+
 	// Load organizations
-	useEffect(() => {
+	useEffect(() => { //side effects in react
 		const loadOrganizations = async () => {
-			const response = await allOrganizations();
-			console.log('response: ', response.data.data);
+			const response = await allOrganizations();  //how to async with useEffect
+			console.log('response: ', response.data.data); //so create a function with 
 			setOrganizations(response.data.data);
 		};
 
@@ -57,6 +70,9 @@ export default function Album() {
 						</Typography>
 					</Container>
 				</div>
+				<IconButton aria-label="add" onClick={() => handleClickOpen("view")} >
+					<AddCircleOutlinedIcon />
+				</IconButton>
 				{/* Managed Organizations */}
 				{managedOrganizations.length > 0 && (
 					<Container className={classes.cardGrid} maxWidth='md'>
@@ -89,6 +105,7 @@ export default function Album() {
 				</Container>
 				{/* End Other Organizations*/}
 			</main>
+			<AddOrganization open={open} close={handleClose} aria-labelledby="form-dialog-title" />
 		</React.Fragment>
 	);
 }
@@ -96,6 +113,9 @@ export default function Album() {
 const useStyles = makeStyles((theme) => ({
 	icon: {
 		marginRight: theme.spacing(2),
+	},
+	img: {
+		maxWidth: '100%'
 	},
 	heroContent: {
 		backgroundColor: theme.palette.background.paper,
