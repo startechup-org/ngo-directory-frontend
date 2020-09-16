@@ -7,3 +7,11 @@ export function allOrganizations() {
 export function organizationById(organization_id) { 
     return api.get(`/organization/${organization_id}`);
 }
+
+export function editOrganizationById(organization_id, data) { 
+    return api.put(`/organization/${organization_id}`, data);
+}
+
+export function addOrganization(data) { 
+    return api.post(`/organization`, data);
+}

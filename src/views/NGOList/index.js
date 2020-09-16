@@ -114,9 +114,6 @@ const useStyles = makeStyles((theme) => ({
 	icon: {
 		marginRight: theme.spacing(2),
 	},
-	img: {
-		maxWidth: '100%'
-	},
 	heroContent: {
 		backgroundColor: theme.palette.background.paper,
 		padding: theme.spacing(8, 0, 6),

@@ -20,14 +20,15 @@ const OrganizationCard = (card) => {
   const [chosenOrg, setChosenOrg] = useState('')
 
   const handleClickOpen = (data) => {
+    if (data.modalType === "edit") {
+      setOpenEditDialog(true);
+      setChosenOrg(data.id)
+    }
     if (data.modalType === "view") {
       setOpenViewDialog(true);
       setChosenOrg(data.id)
     }
-    
-    if (data.modalType === "edit") {
-      setOpenEditDialog(true);
-    }
+
 	};
   
   const handleClose = (modalType) => {
@@ -59,14 +60,15 @@ const OrganizationCard = (card) => {
             <Button size="small" color="primary" onClick={() => handleClickOpen({"modalType": "view", "id": card.card._id})}>
               View
             </Button>
-            <Button size="small" color="primary" onClick={() => handleClickOpen({"modalType:": "edit" })}>
+            <Button size="small" color="primary" onClick={() => handleClickOpen({ "modalType": "edit", "id": card.card._id })}>
+            {/* <Button size="small" color="primary" onClick={() => console.log("testing")}> */}
               Edit
             </Button>
           </CardActions>
         </Card>
       </Grid>
       {chosenOrg && <ViewOrganization open={openViewDialog} close={() => handleClose("view")} aria-labelledby="form-dialog-title" org_id={chosenOrg} />}
-      <EditOrganization open={openEditDialog} close={() => handleClose("edit")} aria-labelledby="form-dialog-title"/>
+      {chosenOrg && <EditOrganization open={openEditDialog} setOpen={setOpenEditDialog} close={() => handleClose("edit")} aria-labelledby="form-dialog-title" org_id={chosenOrg} />}
     </>
    
   );
