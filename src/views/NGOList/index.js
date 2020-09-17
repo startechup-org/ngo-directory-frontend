@@ -10,14 +10,19 @@ import OrganizationGrid from "./OrganizationGrid";
 import OrganizationModal from "./OrganizationModal";
 
 import { managedOrganizationsByUser } from "api/user.api";
+
+
+
 import {
   allOrganizations,
   editOrganizationById,
   addOrganization,
 } from "api/organization.api";
 
-export default function Album() {
+export default function NGOList() {
   const classes = useStyles();
+  
+  
 
   /* States */
   const [organizations, setOrganizations] = useState([]);
@@ -30,21 +35,21 @@ export default function Album() {
   const [action, setAction] = useState(null);
 
   // Modal state and action
-  const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(false);
+	
 
   // Load organizations
   useEffect(() => {
-    //side effects in react
+	//side effects in react
     const loadOrganizations = async () => {
-      const response = await allOrganizations(); //how to async with useEffect
-      console.log("response: ", response.data.data); //so create a function with
+	const response = await allOrganizations(); //how to async with 
+	console.log('response: ', response.data.data)
       setOrganizations(response.data.data);
     };
 
     const user_id = localStorage.getItem("user_id");
     const loadManagedOrgs = async () => {
       const response = await managedOrganizationsByUser(user_id);
-      console.log("response: ", response.data.data);
       setManagedOrganizations(response.data.data);
     };
 
