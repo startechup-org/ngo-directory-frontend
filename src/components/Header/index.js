@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 import Logo from '../../images/Logo.svg'
+import { auth } from 'utils/auth';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -43,12 +44,12 @@ export default function Pricing() {
                 <Link variant="button" color="textPrimary" href="#" className={classes.link}>
                 User List
                 </Link>
-                <Link variant="button" color="textPrimary" href="#" className={classes.link}>
+                <Link variant="button" color="textPrimary" href="#list" className={classes.link}>
                 NGO List
                 </Link>
             </nav>
             <Button href="#" color="primary" variant="outlined" className={classes.link}>
-                Login
+              {auth.isLoggedIn ? "Logout" : "Login"}
             </Button>
             <nav>
                 <Link variant="button" color="textPrimary" href="#" className={classes.link}>
