@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-
+import Alert from "@material-ui/lab/Alert";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import TextField from "@material-ui/core/TextField";
@@ -14,7 +14,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 
-import { user_login } from "../../api/user.api";
 import { auth } from "utils/auth";
 import { useAuth } from "context/auth";
 
@@ -23,41 +22,12 @@ export default function Login() {
   const classes = useStyles();
   let history = useHistory();
 	const { login } = useAuth();
-	console.log('login', login)
 
   /* States */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  /* API Methods */
-//   const login = async () => {
-//     try {
-//       const response = await user_login({
-//         email,
-//         password,
-//       });
-      /*
-        User Credentials
-          {
-            "email": "ccredo@startechup.com",
-            "password": "P@ssword01"
-          }
-      */
-// 	console.log(response);
-// 	console.log("user_id: ", response.data.user._id);
-// 	localStorage.setItem("ngodirectory_auth", JSON.stringify(response.data));
-// 	localStorage.setItem("login_timestamp", new Date().getTime().toString());
-// 	localStorage.setItem("user_id", response.data.user._id);
-// 	auth.isLoggedIn = true;
-// 	auth.isSuperAdmin = response.data?.user?.userType === "super_admin";
-
-// 	history.push(auth.isSuperAdmin ? "/admin" : "/list");
-    
-//     } catch (err) {
-//       console.log("err login: ", err);
-//     }
-//   };
-
+  const [errResponse, setErrResponse] = useState("")
+	
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const form = event.currentTarget;
@@ -66,30 +36,27 @@ export default function Login() {
 			event.stopPropagation();
 			return;
 		}
-		// } else {
-		// 	login()
-		// }
-		console.log('login: ', login)
-		// return null
-	
-		// login({
-		// 	email,
-		// 	password,
-		// })
-		// 	.then(() => {
-		// 		auth.isLoggedIn = true;
-		// 		// auth.isSuperAdmin = response.data?.user?.userType === "super_admin";
-	
-		// 		// history.push(auth.isSuperAdmin ? "/admin" : "/list");
-		// 		history.push("/list")
-		// 	})
-		// 	.catch((err) => console.log("err login", err));
+
+		login({
+			email,
+			password,
+		}).then((response) => {
+			auth.isLoggedIn = true;
+			auth.isSuperAdmin = response.data?.user?.userType === "super_admin";
+			history.push(auth.isSuperAdmin ? "/admin" : "/list");
+		})
+		.catch((err) => {
+			setErrResponse("Invalid Username/Password")
+			console.log("err login", err);
+			console.log("MESSAGE", err.message);
+		})
 	
   };
 
   return (
     <React.Fragment>
       <CssBaseline />
+		{errResponse && <Alert severity="error">{errResponse}</Alert>}
       <Container maxWidth="xs" component="main">
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>

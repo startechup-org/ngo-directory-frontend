@@ -1,14 +1,11 @@
 import React from "react";
 import api from "utils/api";
 import useLocalStorage from "utils/hooks/useLocalStorage";
-import { useHistory } from "react-router-dom";
-
-
 
 const AuthContext = React.createContext();
 
 function AuthProvider(props) {
-  let history = useHistory();
+ 
   const [user, setUser] = useLocalStorage("user", null);
   const [auth, setAuth] = useLocalStorage("ngodirectory_auth", null);
   const [loginTimestamp, setLoginTimestamp] = useLocalStorage(
@@ -27,9 +24,12 @@ function AuthProvider(props) {
   };
 
   const logout = () => {
-    localStorage.removeItem("ngodirectory_auth");
-    localStorage.removeItem("login_timestamp");
-    history.push("/")
+    return new Promise((resolve, reject) => {
+      localStorage.removeItem("ngodirectory_auth");
+      localStorage.removeItem("login_timestamp");
+      localStorage.removeItem("user");
+      resolve("ok")
+    })
   };
 
   const signup = (data) => {

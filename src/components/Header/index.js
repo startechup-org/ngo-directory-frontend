@@ -5,15 +5,22 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
+import { useHistory } from "react-router-dom";
 import Logo from '../../images/Logo.svg'
 import { auth } from 'utils/auth';
 import { useAuth } from "../../context/auth";
 
 export default function Header() {
-  
-    // const { logout } = useAuth();
+    const { logout } = useAuth();
     const classes = useStyles();
+    let history = useHistory();
+    
+    const handleLogOut = () => {
+      logout().then(() => {
+        auth.isLoggedIn = false
+        history.push("/")
+      })
+    }
 
     return (
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
@@ -30,7 +37,7 @@ export default function Header() {
                 </Link>
             </nav>
             {auth.isLoggedIn ? (
-            <Button href="#" color="primary" variant="outlined" className={classes.link}> {/* onClick={() => logout()}> */}
+            <Button href="#" color="primary" variant="outlined" className={classes.link} onClick={() => handleLogOut()}> 
                   Logout
               </Button>
             ) : (
