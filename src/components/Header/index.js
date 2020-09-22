@@ -8,30 +8,11 @@ import Button from '@material-ui/core/Button';
 
 import Logo from '../../images/Logo.svg'
 import { auth } from 'utils/auth';
+import { useAuth } from "../../context/auth";
 
-const useStyles = makeStyles((theme) => ({
-    '@global': {
-      ul: {
-        margin: 0,
-        padding: 0,
-        listStyle: 'none',
-      },
-    },
-    appBar: {
-      borderBottom: `1px solid ${theme.palette.divider}`,
-    },
-    toolbar: {
-      flexWrap: 'wrap',
-    },
-    toolbarTitle: {
-      flexGrow: 1,
-    },
-    link: {
-      margin: theme.spacing(1, 1.5),
-    },
-}));
-
-export default function Pricing() {
+export default function Header() {
+  
+    // const { logout } = useAuth();
     const classes = useStyles();
 
     return (
@@ -48,9 +29,16 @@ export default function Pricing() {
                 NGO List
                 </Link>
             </nav>
-            <Button href="#" color="primary" variant="outlined" className={classes.link}>
-              {auth.isLoggedIn ? "Logout" : "Login"}
-            </Button>
+            {auth.isLoggedIn ? (
+            <Button href="#" color="primary" variant="outlined" className={classes.link}> {/* onClick={() => logout()}> */}
+                  Logout
+              </Button>
+            ) : (
+              <Button href="#" color="primary" variant="outlined" className={classes.link}>
+               Log In
+              </Button>
+            )}
+           
             <nav>
                 <Link variant="button" color="textPrimary" href="#" className={classes.link}>
                 FR
@@ -61,3 +49,25 @@ export default function Pricing() {
     )
     
 }
+
+const useStyles = makeStyles((theme) => ({
+  '@global': {
+    ul: {
+      margin: 0,
+      padding: 0,
+      listStyle: 'none',
+    },
+  },
+  appBar: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+  },
+  toolbar: {
+    flexWrap: 'wrap',
+  },
+  toolbarTitle: {
+    flexGrow: 1,
+  },
+  link: {
+    margin: theme.spacing(1, 1.5),
+  },
+}));

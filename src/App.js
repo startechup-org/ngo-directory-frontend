@@ -14,7 +14,7 @@ import { PrivateRoute, PublicRoute, SuperAdminRoute } from "./views";
 function App() {
   return (
     <Router>
-      <Header />
+      <PublicRoute component={Header} />
       <Switch>
         <PublicRoute path="/users" component={UserList} exact />
         <SuperAdminRoute path="/admin" component={AdminDashboard} exact />

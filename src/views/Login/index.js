@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
@@ -16,44 +16,26 @@ import Grid from "@material-ui/core/Grid";
 
 import { user_login } from "../../api/user.api";
 import { auth } from "utils/auth";
-import { useAuth } from "../../context/auth";
+import { useAuth } from "context/auth";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 export default function Login() {
   const classes = useStyles();
   let history = useHistory();
-//   const { login } = useAuth();
+	const { login } = useAuth();
+	console.log('login', login)
 
   /* States */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   /* API Methods */
-  const login = async () => {
-    try {
-      const response = await user_login({
-        email,
-        password,
-      });
+//   const login = async () => {
+//     try {
+//       const response = await user_login({
+//         email,
+//         password,
+//       });
       /*
         User Credentials
           {
@@ -61,40 +43,48 @@ export default function Login() {
             "password": "P@ssword01"
           }
       */
-	console.log(response);
-	console.log("user_id: ", response.data.user._id);
-	localStorage.setItem("ngodirectory_auth", JSON.stringify(response.data));
-	localStorage.setItem("login_timestamp", new Date().getTime().toString());
-	localStorage.setItem("user_id", response.data.user._id);
-	auth.isLoggedIn = true;
-	auth.isSuperAdmin = response.data?.user?.userType === "super_admin";
+// 	console.log(response);
+// 	console.log("user_id: ", response.data.user._id);
+// 	localStorage.setItem("ngodirectory_auth", JSON.stringify(response.data));
+// 	localStorage.setItem("login_timestamp", new Date().getTime().toString());
+// 	localStorage.setItem("user_id", response.data.user._id);
+// 	auth.isLoggedIn = true;
+// 	auth.isSuperAdmin = response.data?.user?.userType === "super_admin";
 
-	history.push(auth.isSuperAdmin ? "/admin" : "/list");
+// 	history.push(auth.isSuperAdmin ? "/admin" : "/list");
     
-    } catch (err) {
-      console.log("err login: ", err);
-    }
-  };
+//     } catch (err) {
+//       console.log("err login: ", err);
+//     }
+//   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    console.log("form: ", form);
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      return;
-	} else {
-		login()
-	}
-
-    // login({
-    //   email,
-    //   password,
-    // })
-    //   .then(() => {
-    //     history.push("/list");
-    //   })
-    //   .catch((err) => console.log("err login", err));
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		const form = event.currentTarget;
+		console.log("form: ", form);
+		if (form.checkValidity() === false) {
+			event.stopPropagation();
+			return;
+		}
+		// } else {
+		// 	login()
+		// }
+		console.log('login: ', login)
+		// return null
+	
+		// login({
+		// 	email,
+		// 	password,
+		// })
+		// 	.then(() => {
+		// 		auth.isLoggedIn = true;
+		// 		// auth.isSuperAdmin = response.data?.user?.userType === "super_admin";
+	
+		// 		// history.push(auth.isSuperAdmin ? "/admin" : "/list");
+		// 		history.push("/list")
+		// 	})
+		// 	.catch((err) => console.log("err login", err));
+	
   };
 
   return (
@@ -161,3 +151,24 @@ export default function Login() {
     </React.Fragment>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+	paper: {
+	  marginTop: theme.spacing(8),
+	  display: "flex",
+	  flexDirection: "column",
+	  alignItems: "center",
+	},
+	avatar: {
+	  margin: theme.spacing(1),
+	  backgroundColor: theme.palette.secondary.main,
+	},
+	form: {
+	  width: "100%", // Fix IE 11 issue.
+	  marginTop: theme.spacing(1),
+	},
+	submit: {
+	  margin: theme.spacing(3, 0, 2),
+	},
+  }));
+  
