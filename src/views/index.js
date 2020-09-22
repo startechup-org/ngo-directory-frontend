@@ -38,4 +38,23 @@ const PublicRoute = ({ component: Component, restricted = false, ...rest }) => {
 	);
 };
 
-export { PrivateRoute, PublicRoute };
+const SuperAdminRoute = ({ component: Component, ...rest }) => {
+	const { isLoggedIn, isSuperAdmin } = auth; //from utils to check if there's token in localStorage
+  
+	return (
+	  // Show the component only if the user is logged in
+	  // Otherwise, redirect to / which is our signin page
+	  <Route
+		{...rest}
+		render={(props) =>
+		  isLoggedIn && isSuperAdmin ? (
+			<Component {...props} />
+		  ) : (
+			<Redirect to="/" />
+		  )
+		}
+	  />
+	);
+  };
+
+export { PrivateRoute, PublicRoute, SuperAdminRoute };

@@ -7,15 +7,17 @@ import LoginPage from "views/Login";
 import SignUpPage from "views/SignUp";
 import NgoListPage from "views/NGOList";
 import AdminDashboard from "views/AdminDashboard";
+import UserList from "views/UserList"
 
-import { PrivateRoute, PublicRoute } from "./views";
+import { PrivateRoute, PublicRoute, SuperAdminRoute } from "./views";
 
 function App() {
   return (
     <Router>
       <Header />
       <Switch>
-        <PublicRoute path="/admin" component={AdminDashboard} exact />
+        <PublicRoute path="/users" component={UserList} exact />
+        <SuperAdminRoute path="/admin" component={AdminDashboard} exact />
         <PrivateRoute path="/list" component={NgoListPage} exact />
         <PublicRoute
           path="/signup"
