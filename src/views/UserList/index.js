@@ -25,11 +25,8 @@ export default function NGOList() {
 	console.log('response: ', response.data.data)
       setOrganizations(response.data.data);
     };
-
     loadOrganizations();
-
   }, []);
-
 
   return (
     <React.Fragment>
