@@ -29,10 +29,10 @@ export default function Header() {
               <img src={Logo} alt="Globe Drop"/> 
             </Typography>
             <nav>
-                <Link variant="button" color="textPrimary" href="#" className={classes.link}>
+                <Link variant="button" color="textPrimary" href="/users" className={classes.link}>
                 User List
                 </Link>
-                <Link variant="button" color="textPrimary" href="#list" className={classes.link}>
+                <Link variant="button" color="textPrimary" href="/list" className={classes.link}>
                 NGO List
                 </Link>
             </nav>
