@@ -1,6 +1,13 @@
 import api from 'utils/api';
 
- export function user_login(data) { 
+import { retrieveUserCredential } from "utils/auth";
+const headers = {headers: { "Authorization": `Bearer ${retrieveUserCredential().access_token}`}}
+
+export function allUsers() {
+    return api.get('/users', headers);
+}
+
+export function user_login(data) { 
     return api.post('/user/login/', data);
 }
 
