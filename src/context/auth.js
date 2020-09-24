@@ -46,6 +46,7 @@ function AuthProvider(props) {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         auth,
         loginTimestamp,
         login,

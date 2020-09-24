@@ -9,7 +9,7 @@ import OrganizationGrid from "./OrganizationGrid";
 
 import OrganizationModal from "./OrganizationModal";
 
-import { managedOrganizationsByUser } from "api/user.api";
+import { managedOrganizationsByUser,  updateUser} from "api/user.api";
 import {
   allOrganizations,
   editOrganizationById,
@@ -19,7 +19,7 @@ import { useAuth } from "../../context/auth";
 
 export default function NGOList() {
   const classes = useStyles();
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   /* States */
   const [organizations, setOrganizations] = useState([]);
   const [managedOrganizations, setManagedOrganizations] = useState([]);
@@ -54,14 +54,24 @@ export default function NGOList() {
 
   }, [user._id]);
 
-  const newOrganization = async (organization) => {
+  const newOrganization = (organization) => {
     try {
-      const response = await addOrganization(organization);
+      const response = addOrganization(organization);
+      console.log('log: ', response)
+      return response
+    } catch (error) {
+      console.log("err: ", error);
+    }
+  };
+
+  const addUserAsOrgAdmin =  (user_id, data) => {
+    try {
+      const response =  updateUser(user_id, data);
       console.log("response edit: ", response.data);
     } catch (error) {
       console.log("err login: ", error);
     }
-  };
+  }
 
   const editOrganization = async (organization) => {
     const {
@@ -107,14 +117,19 @@ export default function NGOList() {
       setOrganizations(updatedOrganization);
     }
     if (action === "Add") {
-      const { user } = JSON.parse(localStorage.getItem("ngodirectory_auth"));
       const new_org = {
         "admins": [user._id],
         ...activeOrganization
       }
       console.log('new_org: ', new_org)
-      newOrganization(new_org);
+      const newOrg = await newOrganization(new_org);
+      console.log('new_org: ', newOrg.data.data._id)
+      // const { _id } = await 
+      // console.log('data: ', _id)
       setOrganizations([activeOrganization, ...organizations]);
+      setUser(user => ({ ...user, organizations: [...user.organizations, newOrg.data.data._id] })) 
+      console.log('user: ', user)
+      await addUserAsOrgAdmin(user._id, user)
     }
 
     setOpen(false);

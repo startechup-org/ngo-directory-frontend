@@ -15,6 +15,10 @@ export function user_signup(data) {
     return api.post('/user/', data);
 }
 
+export function updateUser(user_id, data) {
+	return api.put(`/user/${user_id}`, data);
+}
+
 export function managedOrganizationsByUser(user_id) {
 	return api.get(`/user/${user_id}/organizations`);
 }
