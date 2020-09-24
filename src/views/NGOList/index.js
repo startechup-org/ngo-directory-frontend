@@ -24,6 +24,11 @@ export default function NGOList() {
   const [organizations, setOrganizations] = useState([]);
   const [managedOrganizations, setManagedOrganizations] = useState([]);
 
+  const otherOrganizations = organizations.filter(
+    (org) => !org?.admins?.includes(user._id)
+  );
+  console.log("otherOrganizations", otherOrganizations);
+
   // Active organization
   const [activeOrganization, setActiveOrganization] = useState(null);
 
@@ -64,14 +69,16 @@ export default function NGOList() {
     }
   };
 
-  const addUserAsOrgAdmin =  (user_id, data) => {
+  const addUserAsOrgAdmin = (user_id, data) => {
+    console.log("addUserAsOrgAdmin -> user_id, data", user_id, data);
     try {
-      const response =  updateUser(user_id, data);
+      const response = updateUser(user_id, data);
       console.log("response edit: ", response.data);
+      return response;
     } catch (error) {
-      console.log("err login: ", error);
+      console.log("err: ", error);
     }
-  }
+  };
 
   const editOrganization = async (organization) => {
     const {
@@ -121,15 +128,17 @@ export default function NGOList() {
         "admins": [user._id],
         ...activeOrganization
       }
-      console.log('new_org: ', new_org)
       const newOrg = await newOrganization(new_org);
-      console.log('new_org: ', newOrg.data.data._id)
-      // const { _id } = await 
-      // console.log('data: ', _id)
-      setOrganizations([activeOrganization, ...organizations]);
-      setUser(user => ({ ...user, organizations: [...user.organizations, newOrg.data.data._id] })) 
-      console.log('user: ', user)
-      await addUserAsOrgAdmin(user._id, user)
+      setManagedOrganizations([activeOrganization, ...managedOrganizations]);
+      console.log("user: ", user);
+      await addUserAsOrgAdmin(user._id, {
+        organizations: [...user.organizations, newOrg.data.data._id],
+      }).then(() => {
+        setUser((user) => ({
+          ...user,
+          organizations: [...user.organizations, newOrg.data.data._id],
+        }));
+      });
     }
 
     setOpen(false);
