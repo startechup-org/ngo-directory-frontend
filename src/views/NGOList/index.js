@@ -10,20 +10,16 @@ import OrganizationGrid from "./OrganizationGrid";
 import OrganizationModal from "./OrganizationModal";
 
 import { managedOrganizationsByUser } from "api/user.api";
-
-
-
 import {
   allOrganizations,
   editOrganizationById,
   addOrganization,
 } from "api/organization.api";
+import { useAuth } from "../../context/auth";
 
 export default function NGOList() {
   const classes = useStyles();
-  
-  
-
+  const { user } = useAuth();
   /* States */
   const [organizations, setOrganizations] = useState([]);
   const [managedOrganizations, setManagedOrganizations] = useState([]);
@@ -42,20 +38,21 @@ export default function NGOList() {
   useEffect(() => {
 	//side effects in react
     const loadOrganizations = async () => {
-	const response = await allOrganizations(); //how to async with 
-	console.log('response: ', response.data.data)
+	  const response = await allOrganizations(); //how to async with 
+	  console.log('response111: ', response.data.data)
       setOrganizations(response.data.data);
     };
 
-    const user_id = localStorage.getItem("user_id");
+    //useAuth for user_id
     const loadManagedOrgs = async () => {
-      const response = await managedOrganizationsByUser(user_id);
+      const response = await managedOrganizationsByUser(user._id);
       setManagedOrganizations(response.data.data);
     };
 
     loadOrganizations();
     loadManagedOrgs();
-  }, []);
+
+  }, [user._id]);
 
   const newOrganization = async (organization) => {
     try {
@@ -110,7 +107,13 @@ export default function NGOList() {
       setOrganizations(updatedOrganization);
     }
     if (action === "Add") {
-      newOrganization(activeOrganization);
+      const { user } = JSON.parse(localStorage.getItem("ngodirectory_auth"));
+      const new_org = {
+        "admins": [user._id],
+        ...activeOrganization
+      }
+      console.log('new_org: ', new_org)
+      newOrganization(new_org);
       setOrganizations([activeOrganization, ...organizations]);
     }
 

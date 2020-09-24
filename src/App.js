@@ -7,19 +7,24 @@ import LoginPage from "views/Login";
 import SignUpPage from "views/SignUp";
 import NgoListPage from "views/NGOList";
 import AdminDashboard from "views/AdminDashboard";
-import UserList from "views/UserList"
-import { AuthProvider } from 'context/auth'
+import UserList from "views/UserList";
 
-import { PrivateRoute, PublicRoute, SuperAdminRoute } from "./views";
+import { PrivateRoute, PublicRoute } from "./views";
+import { AuthProvider } from "context/auth";
 
 function App() {
-  return ( 
+  return (
     <Router>
       <AuthProvider>
         <PublicRoute component={Header} />
         <Switch>
           <PublicRoute path="/users" component={UserList} exact />
-          <SuperAdminRoute path="/admin" component={AdminDashboard} exact />
+          <PrivateRoute
+            path="/admin"
+            component={AdminDashboard}
+            allowedRoles={["super_admin"]}
+            exact
+          />
           <PrivateRoute path="/list" component={NgoListPage} exact />
           <PublicRoute
             path="/signup"

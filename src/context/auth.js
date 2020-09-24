@@ -5,17 +5,18 @@ import useLocalStorage from "utils/hooks/useLocalStorage";
 const AuthContext = React.createContext();
 
 function AuthProvider(props) {
- 
-  const [user, setUser] = useLocalStorage("user", null);
-  const [auth, setAuth] = useLocalStorage("ngodirectory_auth", null);
+  const [user, setUser] = useLocalStorage("user");
+  const [auth, setAuth] = useLocalStorage("ngodirectory_auth");
   const [loginTimestamp, setLoginTimestamp] = useLocalStorage(
-    "login_timestamp",
-    null
+    "login_timestamp"
   );
+
+  const isLoggedIn = !!user;
+  const isSuperAdmin = user?.userType === "super_admin" || false;
 
   const login = (data) => {
     return api.post("/user/login/", data).then((response) => {
-      setUser(response.data.user);
+      setUser(response.data?.user);
       setAuth(response.data);
       setLoginTimestamp(new Date().getTime().toString());
 
@@ -24,12 +25,17 @@ function AuthProvider(props) {
   };
 
   const logout = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
+      setUser(null);
+      setAuth(null);
+      setLoginTimestamp(null);
+
       localStorage.removeItem("ngodirectory_auth");
       localStorage.removeItem("login_timestamp");
       localStorage.removeItem("user");
-      resolve("ok")
-    })
+
+      resolve("done");
+    });
   };
 
   const signup = (data) => {
@@ -38,7 +44,16 @@ function AuthProvider(props) {
 
   return (
     <AuthContext.Provider
-      value={{ user, auth, loginTimestamp, login, logout, signup }}
+      value={{
+        user,
+        auth,
+        loginTimestamp,
+        login,
+        logout,
+        signup,
+        isLoggedIn,
+        isSuperAdmin,
+      }}
       {...props}
     />
   );

@@ -18,7 +18,6 @@ import {
 export default function UserList() {
   const classes = useStyles();
   
-  
 /* States */
   
   const [users, setUsers] = useState([]);

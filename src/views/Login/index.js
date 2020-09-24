@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
@@ -14,13 +13,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 
-import { auth } from "utils/auth";
 import { useAuth } from "context/auth";
 
 
 export default function Login() {
   const classes = useStyles();
-  let history = useHistory();
 	const { login } = useAuth();
 
   /* States */
@@ -35,23 +32,32 @@ export default function Login() {
 		if (form.checkValidity() === false) {
 			event.stopPropagation();
 			return;
-		}
+    }
+    
+    login({
+      email,
+      password,
+    }).catch((err) => { 
+      console.log("err login", err);
+      setErrResponse("Invalid Username/Password")
+    }
+    )};
 
-		login({
-			email,
-			password,
-		}).then((response) => {
-			auth.isLoggedIn = true;
-			auth.isSuperAdmin = response.data?.user?.userType === "super_admin";
-			history.push(auth.isSuperAdmin ? "/admin" : "/list");
-		})
-		.catch((err) => {
-			setErrResponse("Invalid Username/Password")
-			console.log("err login", err);
-			console.log("MESSAGE", err.message);
-		})
+		// login({
+		// 	email,
+		// 	password,
+		// }).then((response) => {
+		// 	auth.isLoggedIn = true;
+		// 	auth.isSuperAdmin = response.data?.user?.userType === "super_admin";
+		// 	history.push(auth.isSuperAdmin ? "/admin" : "/list");
+		// })
+		// .catch((err) => {
+		// 	setErrResponse("Invalid Username/Password")
+		// 	console.log("err login", err);
+		// 	console.log("MESSAGE", err.message);
+		// })
 	
-  };
+  // };
 
   return (
     <React.Fragment>

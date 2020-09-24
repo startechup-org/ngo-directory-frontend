@@ -1,60 +1,46 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { auth } from '../utils/auth';
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
+import { useAuth } from "context/auth";
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
-	const { isLoggedIn } = auth; //from utils to check if there's token in localStorage
+const PrivateRoute = ({ component: Component, allowedRoles = [], ...rest }) => {
+  const { isLoggedIn, user } = useAuth(); //from utils to check if there's token in localStorage
+  console.log("PrivateRoute -> isLoggedIn", isLoggedIn);
+  console.log("PrivateRoute -> user", user);
 
-	return (
-		// Show the component only if the user is logged in
-		// Otherwise, redirect to / which is our signin page
-		<Route
-			{...rest}
-			render={(props) =>
-				isLoggedIn ? <Component {...props} /> : <Redirect to='/' />
-			}
-		/>
-	);
+  return (
+    // Show the component only if the user is logged in
+    // Otherwise, redirect to / which is our signin page
+    <Route
+      {...rest}
+      render={(props) => {
+        if (allowedRoles.length > 0 && !allowedRoles.includes(user?.userType)) {
+          return <Redirect to="/" />;
+        }
+
+        return isLoggedIn ? <Component {...props} /> : <Redirect to="/" />;
+      }}
+    />
+  );
 };
 
 const PublicRoute = ({ component: Component, restricted = false, ...rest }) => {
-	const { isLoggedIn } = auth;
-	console.log('isLoggedIn: ', isLoggedIn);
+  const { isLoggedIn, isSuperAdmin } = useAuth();
 
-	return (
-		// restricted = false meaning public route, unrestricted access
-		// restricted = true meaning restricted route such as signin or signup,
-		//              do not show if already logged in, we redirect to "/list"
-		<Route
-			{...rest}
-			render={(props) =>
-				isLoggedIn && restricted ? (
-					<Redirect to='/list' />
-				) : (
-					<Component {...props} />
-				)
-			}
-		/>
-	);
+  return (
+    // restricted = false meaning public route, unrestricted access
+    // restricted = true meaning restricted route such as signin or signup,
+    //              do not show if already logged in, we redirect to "/list"
+    <Route
+      {...rest}
+      render={(props) => {
+        return isLoggedIn && restricted ? (
+          <Redirect to={isSuperAdmin ? "/admin" : "/list"} />
+        ) : (
+          <Component {...props} />
+        );
+      }}
+    />
+  );
 };
 
-const SuperAdminRoute = ({ component: Component, ...rest }) => {
-	const { isLoggedIn, isSuperAdmin } = auth; //from utils to check if there's token in localStorage
-  
-	return (
-	  // Show the component only if the user is logged in
-	  // Otherwise, redirect to / which is our signin page
-	  <Route
-		{...rest}
-		render={(props) =>
-		  isLoggedIn && isSuperAdmin ? (
-			<Component {...props} />
-		  ) : (
-			<Redirect to="/" />
-		  )
-		}
-	  />
-	);
-  };
-
-export { PrivateRoute, PublicRoute, SuperAdminRoute };
+export { PrivateRoute, PublicRoute };
