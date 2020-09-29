@@ -13,30 +13,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 
-import { user_signup } from '../../api/user.api'
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import { useAuth } from "context/auth";
 
 export default function SignUp() {
   const classes = useStyles();
+  const { signup } = useAuth();
 
   /* States */
   const [username, setUsername] = useState('')
@@ -48,22 +29,22 @@ export default function SignUp() {
   const [ngoAdmin, setNgoAdmin] = useState('user')
 
 /* API Method */
-  const signup = async () => {
-    try {
-      const response = await user_signup({
-        username,
-        name,
-        email,
-        password,
-        language,
-        country,
-        ngoAdmin
-      });
-      console.log(response)
-    } catch (err) {
-      console.log('err login: ', err)
-    }
-  }
+  // const signup = async () => {
+  //   try {
+  //     const response = await user_signup({
+  //       username,
+  //       name,
+  //       email,
+  //       password,
+  //       language,
+  //       country,
+  //       ngoAdmin
+  //     });
+  //     console.log(response)
+  //   } catch (err) {
+  //     console.log('err login: ', err)
+  //   }
+  // }
 
   const handleSubmit = async (event) => {
     console.log('test: ', event.currentTarget)
@@ -72,9 +53,19 @@ export default function SignUp() {
     console.log('form: ', form)
     if (form.checkValidity() === false) {
         event.stopPropagation();
-    } else {
-        signup()
+      return;
     }
+    signup({
+        username,
+        name,
+        email,
+        password,
+        language,
+        country,
+        ngoAdmin
+    }).catch((err) => {
+      console.log("err login", err);
+    })
   };
 
   return (
@@ -200,3 +191,23 @@ export default function SignUp() {
     </React.Fragment>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));

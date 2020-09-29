@@ -39,7 +39,13 @@ function AuthProvider(props) {
   };
 
   const signup = (data) => {
-    return api.post("/user/", data);
+    return api.post("/user", data).then((response) => {
+      setUser(response.data?.user);
+      setAuth(response.data);
+      setLoginTimestamp(new Date().getTime().toString());
+
+      return response;
+    })
   };
 
   return (
