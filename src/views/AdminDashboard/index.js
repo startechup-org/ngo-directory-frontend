@@ -1,4 +1,4 @@
-import React, { useState }from 'react';
+import React, { useState, useEffect }from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,17 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import Table from './Table';
 
+import {
+  allOrganizations,
+} from "api/organization.api";
+
+import {
+  allUsers,
+} from "api/user.api";
+
+const organizationTableHeaders = ["Name", "Description", "City", "Country"]
+const userTableHeaders = ["Username", "Name", "Email", "Language", "Country"]
+
 const drawerWidth = 240;
 export default function AdminDashboard() {
   const classes = useStyles();
@@ -19,6 +30,27 @@ export default function AdminDashboard() {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
+  const [organizations, setOrganizations] = useState([]);
+  const [users, setUsers] = useState([]);
+
+    // Load organizations
+  useEffect(() => {
+    //side effects in react
+    const loadOrganizations = async () => {
+      const response = await allOrganizations(); //how to async with 
+      console.log('response: ', response.data.data)
+      setOrganizations(response.data.data);
+    };
+    
+    const loadUsers = async () => {
+      const response = await allUsers(); //how to async with 
+      console.log('response: ', response.data.data)
+      setUsers(response.data.data);
+    };
+      loadOrganizations();
+      loadUsers();
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -49,7 +81,8 @@ export default function AdminDashboard() {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Table />
+                <Table type={"Organizations"} headers={organizationTableHeaders} data={organizations} />
+                <Table type={"Users"} headers={userTableHeaders} data={users} />
               </Paper>
             </Grid>
           </Grid>
