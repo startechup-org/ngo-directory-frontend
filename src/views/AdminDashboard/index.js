@@ -34,6 +34,7 @@ export default function AdminDashboard() {
   const [organizations, setOrganizations] = useState([]);
   const [users, setUsers] = useState([]);
 
+
     // Load organizations
   useEffect(() => {
     //side effects in react
@@ -53,42 +54,45 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Admin Dashboard
-          </Typography>
-          <Typography component="h1" variant="h6" color="inherit" noWrap align="right">
-            LOGOUT
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Table type={"Organizations"} headers={organizationTableHeaders} data={organizations} />
-                <Table type={"Users"} headers={userTableHeaders} data={users} />
-              </Paper>
+    <React.Fragment>
+        <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Admin Dashboard
+            </Typography>
+            <Typography component="h1" variant="h6" color="inherit" noWrap align="right">
+              LOGOUT
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+              {/* Recent Orders */}
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <Table type={"Organizations"} headers={organizationTableHeaders} data={organizations} />
+                  <Table type={"Users"} headers={userTableHeaders} data={users} />
+                </Paper>
+              </Grid>
             </Grid>
-          </Grid>
-        </Container>
-      </main>
-    </div>
+          </Container>
+        </main>
+      </div>
+    
+    </React.Fragment>
   );
 }
 

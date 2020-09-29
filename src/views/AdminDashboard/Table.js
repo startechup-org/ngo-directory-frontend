@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,26 +8,39 @@ import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Modal from './Modal'
 
 
 export default function Datat(props) {
   const { type, headers, data } = props;
+
+  // Active record
+  const [activeRecord, setActiveRecord] = useState(null);
+
+  // Set current action either "Add", "View", "Edit"
+  const [action, setAction] = useState(null);
+
+  // Modal state and action
+  const [open, setOpen] = useState(false);
+
+  //Api add user/org
+
+  //Api edit user/org
+
+  //Api delete user/org
+ 
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {type}
       </Typography>
-      <span align="right"><AddIcon /></span>
+      <span align="right"><AddIcon onClick={() => { setOpen(true) }}/></span>
       <Table size="small">
         <TableHead>
           <TableRow>
             {headers.map((header) => (
               <TableCell>{header}</TableCell>
             ))}
-            {/* <TableCell>Name</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>City</TableCell>
-            <TableCell>Country</TableCell> */}
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -70,6 +83,10 @@ export default function Datat(props) {
         </TableBody>
       </Table>
       <br></br>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+      />
     </React.Fragment>
   );
 }
