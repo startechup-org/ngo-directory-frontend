@@ -1,10 +1,12 @@
 import api from 'utils/api';
 
-import { retrieveUserCredential } from "utils/auth";
-const headers = {headers: { "Authorization": `Bearer ${retrieveUserCredential().access_token}`}}
+import { getHeaders } from './headers'
 
-export function allUsers() {
-    return api.get('/users', headers);
+// import { retrieveUserCredential } from "utils/auth";
+// const headers = {headers: { "Authorization": `Bearer ${retrieveUserCredential().access_token}`}}
+
+export function allUsers(access_token) {
+    return api.get('/users', getHeaders(access_token));
 }
 
 export function user_login(data) { 

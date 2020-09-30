@@ -20,11 +20,14 @@ import {
   allUsers,
 } from "api/user.api";
 
+import { useAuth } from "../../context/auth";
+
 const organizationTableHeaders = ["Name", "Description", "City", "Country"]
 const userTableHeaders = ["Username", "Name", "Email", "Language", "Country"]
 
 const drawerWidth = 240;
 export default function AdminDashboard() {
+  const { auth } = useAuth();
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
@@ -39,19 +42,19 @@ export default function AdminDashboard() {
   useEffect(() => {
     //side effects in react
     const loadOrganizations = async () => {
-      const response = await allOrganizations(); //how to async with 
+      const response = await allOrganizations(auth.access_token); //how to async with 
       console.log('response: ', response.data.data)
       setOrganizations(response.data.data);
     };
     
     const loadUsers = async () => {
-      const response = await allUsers(); //how to async with 
+      const response = await allUsers(auth.access_token); //how to async with 
       console.log('response: ', response.data.data)
       setUsers(response.data.data);
     };
       loadOrganizations();
       loadUsers();
-  }, []);
+  }, [auth.access_token]);
 
   return (
     <React.Fragment>

@@ -1,10 +1,8 @@
 import api from 'utils/api';
+import { getHeaders } from './headers'
 
-// import { retrieveUserCredential } from "utils/auth";
-//const headers = {headers: { "Authorization": `Bearer ${retrieveUserCredential().access_token}`}}
-
-export function allOrganizations(headers) {
-    return api.get('/organizations', headers);
+export function allOrganizations(access_token) {
+    return api.get('/organizations', getHeaders(access_token));
 }
 
 export function organizationById(organization_id) { 

@@ -43,10 +43,10 @@ export default function NGOList() {
   useEffect(() => {
 	//side effects in react
     const loadOrganizations = async () => {
-      const headers = {
-        headers: { "Authorization": `Bearer ${auth.access_token}`}
-      }
-      const response = await allOrganizations(headers); //how to async with 
+      // const headers = {
+      //   headers: { "Authorization": `Bearer ${auth.access_token}`}
+      // }
+      const response = await allOrganizations(auth.access_token); //how to async with 
       console.log('response111: ', response.data.data)
         setOrganizations(response.data.data);
     };
