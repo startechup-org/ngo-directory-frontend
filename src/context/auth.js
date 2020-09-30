@@ -16,8 +16,8 @@ function AuthProvider(props) {
 
   const login = (data) => {
     return api.post("/user/login/", data).then((response) => {
-      setUser(response.data?.user);
       setAuth(response.data);
+      setUser(response.data?.user);
       setLoginTimestamp(new Date().getTime().toString());
 
       return response;

@@ -19,7 +19,7 @@ import { useAuth } from "../../context/auth";
 
 export default function NGOList() {
   const classes = useStyles();
-  const { user, setUser } = useAuth();
+  const { user, setUser, auth } = useAuth();
   /* States */
   const [organizations, setOrganizations] = useState([]);
   const [managedOrganizations, setManagedOrganizations] = useState([]);
@@ -43,9 +43,12 @@ export default function NGOList() {
   useEffect(() => {
 	//side effects in react
     const loadOrganizations = async () => {
-	  const response = await allOrganizations(); //how to async with 
-	  console.log('response111: ', response.data.data)
-      setOrganizations(response.data.data);
+      const headers = {
+        headers: { "Authorization": `Bearer ${auth.access_token}`}
+      }
+      const response = await allOrganizations(headers); //how to async with 
+      console.log('response111: ', response.data.data)
+        setOrganizations(response.data.data);
     };
 
     //useAuth for user_id
@@ -57,7 +60,7 @@ export default function NGOList() {
     loadOrganizations();
     loadManagedOrgs();
 
-  }, [user._id]);
+  }, [user._id, auth.access_token]);
 
   const newOrganization = (organization) => {
     try {
