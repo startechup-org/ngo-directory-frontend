@@ -8,10 +8,9 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import DialogContentText from "@material-ui/core/DialogContentText";
 
 function Modal(props) {
-  const { handleSubmit, action, open, setOpen, activeRecord, children } = props;
+  const { handleSubmit, open, setOpen, activeRecord, children } = props;
 
   return (
     <Dialog
@@ -23,13 +22,15 @@ function Modal(props) {
         {`${activeRecord.action} ${activeRecord.type}`}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
+        {/* <DialogContentText>
           Please make the necessary edits to this specific organization.
-        </DialogContentText>
+        </DialogContentText> */}
         {children}
         <DialogActions>
           <Button autoFocus onClick={handleSubmit} color="primary">
-            {action === "Create" ? "Add" : "Save changes"}
+            {activeRecord.action === "Create" && "Add"}
+            {activeRecord.action === "Edit" && "Save Changes"}
+            {activeRecord.action === "Delete" && "Delete"}
           </Button>
         </DialogActions>
       </DialogContent>

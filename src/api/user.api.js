@@ -21,6 +21,10 @@ export function updateUser(user_id, data) {
 	return api.put(`/user/${user_id}`, data);
 }
 
+export function deleteUser(user_id) {
+    return api.delete_(`/user/${user_id}`)
+}
+
 export function managedOrganizationsByUser(user_id) {
 	return api.get(`/user/${user_id}/organizations`);
 }

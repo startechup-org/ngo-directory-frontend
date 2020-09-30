@@ -16,3 +16,7 @@ export function editOrganizationById(organization_id, data) {
 export function addOrganization(data) { 
     return api.post(`/organization`, data);
 }
+
+export function deleteOrganization(organization_id) {
+    return api.delete_(`/organization/${organization_id}`)
+}

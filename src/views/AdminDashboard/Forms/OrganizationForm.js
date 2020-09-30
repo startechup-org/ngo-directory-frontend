@@ -21,7 +21,7 @@ function OrganizationForm(props) {
         label="Name"
         type="text"
         fullWidth
-        value={activeRecord?.data?.org_name}
+        value={activeRecord && activeRecord?.data?.org_name}
         onChange={(e) => handleChange(e, "org_name")}
       />
       <TextField
@@ -30,7 +30,7 @@ function OrganizationForm(props) {
         label="Description"
         type="text"
         fullWidth
-        value={activeRecord?.data?.org_description}
+        value={activeRecord && activeRecord?.data?.org_description}
         onChange={(e) => handleChange(e, "org_description")}
       />
       <TextField
@@ -39,7 +39,7 @@ function OrganizationForm(props) {
         label="City"
         type="text"
         fullWidth
-        value={activeRecord?.data?.org_city}
+        value={activeRecord && activeRecord?.data?.org_city}
         onChange={(e) => handleChange(e, "org_city")}
       />
       <TextField
@@ -48,7 +48,7 @@ function OrganizationForm(props) {
         label="Country"
         type="text"
         fullWidth
-        value={activeRecord?.data?.org_country}
+        value={activeRecord && activeRecord?.data?.org_country}
         onChange={(e) => handleChange(e, "org_country")}
       />
       <TextField
@@ -57,7 +57,7 @@ function OrganizationForm(props) {
         label="Photo Link"
         type="text"
         fullWidth
-        value={activeRecord?.data?.org_picture}
+        value={activeRecord && activeRecord?.data?.org_picture}
         onChange={(e) => handleChange(e, "org_picture")}
       />
     </form>

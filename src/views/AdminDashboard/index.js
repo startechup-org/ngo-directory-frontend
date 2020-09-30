@@ -21,21 +21,48 @@ import { useAuth } from "context/auth";
 import OrganizationForm from "./Forms/OrganizationForm";
 import UserForm from "./Forms/UserForm";
 
-import { editOrganizationById, addOrganization } from "api/organization.api";
-import { user_signup, updateUser } from "api/user.api";
+import { editOrganizationById, addOrganization, deleteOrganization } from "api/organization.api";
+import { user_signup, updateUser, deleteUser } from "api/user.api";
 
-const organizationTableHeaders = ["Name", "Description", "City", "Country"];
-const userTableHeaders = ["Username", "Name", "Email", "Language", "Country"];
+const organizationTableHeaders = [
+  { label: "ID", key: "_id", hide: true },
+  { label: "Name", key: "org_name", hide: false },
+  { label: "Description", key: "org_description", hide: false },
+  { label: "City", key: "org_city", hide: false },
+  { label: "Country", key: "org_country", hide: false },
+  { label: "Photo Link", key: "org_picture", hide: false },
+];
+const userTableHeaders = [
+  { label: "ID", key: "_id", hide: true },
+  { label: "Username", key: "username", hide: false },
+  { label: "Name", key: "name", hide: false },
+  { label: "Email", key: "email", hide: false },
+  { label: "Language", key: "language", hide: false },
+  { label: "Country", key: "country", hide: false },
+];
 const drawerWidth = 240;
 
 const Form = (props) => {
   console.log("Form -> props", props);
+  if (props.activeRecord.action === "Delete") {
+    return <p>Are you sure you want to delete {props.activeRecord.type} {props.activeRecord.data.org_name || props.activeRecord.data.name}?</p>
+  }
   return props.activeRecord.type === "organization" ? (
     <OrganizationForm {...props} />
   ) : (
     <UserForm {...props} />
   );
 };
+
+const GetActiveRecordValue = (headers, data) => {
+  return headers.reduce(
+    (accumulator, currentValue) => ({
+      ...accumulator,
+      ...{ [currentValue.key]: data[currentValue.key] },
+    }),
+    {}
+  )
+}
 
 export default function AdminDashboard() {
   const { auth, user } = useAuth();
@@ -48,12 +75,12 @@ export default function AdminDashboard() {
   const [organizations, setOrganizations] = useState([]);
   const [users, setUsers] = useState([]);
 
-  const organizationsData = organizations.map((org) => {
-    return [org.org_name, org.org_description, org.org_city, org.org_country];
-  });
-  const usersData = users.map((user) => {
-    return [user.username, user.name, user.email, user.language, user.country];
-  });
+  // const organizationsData = organizations.map((org) => {
+  //   return [org.org_name, org.org_description, org.org_city, org.org_country];
+  // });
+  // const usersData = users.map((user) => {
+  //   return [user.username, user.name, user.email, user.language, user.country];
+  // });
 
   // Load organizations
   useEffect(() => {
@@ -95,19 +122,49 @@ export default function AdminDashboard() {
       },
     });
   };
-  const handleEditOrganization = () => {};
-  const handleDeleteOrganization = () => {};
+  const handleEditOrganization = ({ type, eachdata, headers }) => {
+    console.log("handleEditOrganization -> type, eachdata", type, eachdata);
+    setOpen(true);
+    setActiveRecord({
+      type,
+      action: "Edit",
+      data: GetActiveRecordValue(headers, eachdata)
+    });
+  };
+  const handleDeleteOrganization = ({ type, eachdata, headers }) => {
+    setOpen(true);
+    setActiveRecord({
+      type,
+      action: "Delete",
+      data: GetActiveRecordValue(headers, eachdata)
+    });
+  };
 
   const handleCreateUser = () => {
     setOpen(true);
     setActiveRecord({
       type: "user",
       action: "Create",
-      data: {},
+      data: {}
     });
   };
-  const handleEditUser = () => {};
-  const handleDeleteUser = () => {};
+  const handleEditUser = ({ type, eachdata, headers }) => {
+    setOpen(true);
+    setActiveRecord({
+      type,
+      action: "Edit",
+      data: GetActiveRecordValue(headers, eachdata)
+    });
+  };
+  const handleDeleteUser = ({ type, eachdata, headers }) => {
+    setOpen(true);
+    setActiveRecord({
+      type,
+      action: "Delete",
+      data: GetActiveRecordValue(headers, eachdata)
+    });
+  };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -133,12 +190,74 @@ export default function AdminDashboard() {
       });
     }
 
+    if (
+      activeRecord.type === "organization" &&
+      activeRecord.action === "Edit"
+    ) {
+      
+      editOrganizationById(activeRecord.data._id, activeRecord.data).then(() => {
+        const updatedOrganizations = organizations.map((organization) => {
+          if (organization._id === activeRecord.data._id) {
+            return activeRecord.data;
+          }
+  
+          return organization;
+        });
+        setOrganizations(updatedOrganizations)
+      });
+    }
+
+    if (
+      activeRecord.type === "organization" &&
+      activeRecord.action === "Delete"
+    ) {
+      
+      deleteOrganization(activeRecord.data._id).then(() => {
+        const updatedOrganizations = organizations.filter((organization) => {
+          return organization._id !== activeRecord.data._id
+  
+        });
+        setOrganizations(updatedOrganizations)
+      });
+    }
+
     if (activeRecord.type === "user" && activeRecord.action === "Create") {
       const newUser = activeRecord.data;
       user_signup(newUser).then(() => {
         setUsers((prevUsers) => {
           return [...prevUsers, newUser];
         });
+      });
+    }
+
+    if (
+      activeRecord.type === "user" &&
+      activeRecord.action === "Edit"
+    ) {
+      
+      updateUser(activeRecord.data._id, activeRecord.data).then(() => {
+        const updatedUsers = users.map((user) => {
+          if (user._id === activeRecord.data._id) {
+            return activeRecord.data;
+          }
+  
+          return user;
+        });
+        setUsers(updatedUsers)
+      });
+    }
+
+    if (
+      activeRecord.type === "user" &&
+      activeRecord.action === "Delete"
+    ) {
+      
+      deleteUser(activeRecord.data._id).then(() => {
+        const updatedUser = users.filter((user) => {
+          return user._id !== activeRecord.data._id
+  
+        });
+        setUsers(updatedUser)
       });
     }
 
@@ -193,9 +312,10 @@ export default function AdminDashboard() {
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Table
-                    type={"Organizations"}
+                    label={"Organizations"}
+                    type={"organization"}
                     headers={organizationTableHeaders}
-                    data={organizationsData}
+                    data={organizations}
                     actions={{
                       onAdd: handleCreateOrganization,
                       onEdit: handleEditOrganization,
@@ -208,9 +328,10 @@ export default function AdminDashboard() {
                 <br />
                 <Paper className={classes.paper}>
                   <Table
-                    type={"Users"}
+                    label={"Users"}
+                    type={"user"}
                     headers={userTableHeaders}
-                    data={usersData}
+                    data={users}
                     actions={{
                       onAdd: handleCreateUser,
                       onEdit: handleEditUser,

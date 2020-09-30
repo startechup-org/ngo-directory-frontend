@@ -10,12 +10,12 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 export default function Table(props) {
-  const { type, headers, data, actions } = props;
+  const { label, type, headers, data, actions } = props;
 
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        {type}
+        {label}
       </Typography>
       <span align="right">
         <AddIcon onClick={() => actions.onAdd()} />
@@ -23,21 +23,32 @@ export default function Table(props) {
       <MUITable size="small">
         <TableHead>
           <TableRow>
-            {headers.map((header) => (
-              <TableCell>{header}</TableCell>
-            ))}
+            {headers
+              .filter((header) => header && !header.hide)
+              .map((header) => (
+                <TableCell key={header.key}>{header.label}</TableCell>
+              ))}
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((eachdata) => (
             <TableRow key={eachdata._id}>
-              {eachdata.map((val) => (
+              {headers
+                .filter((header) => header && !header.hide)
+                .map((header) => (
+                  <TableCell key={`${eachdata._id}-${eachdata[header.key]}`}>{eachdata[header.key]}</TableCell>
+                ))}
+              {/* {eachdata.map((val) => (
                 <TableCell>{val}</TableCell>
-              ))}
+              ))} */}
               <TableCell>
-                <EditIcon />
-                <DeleteIcon />
+                <EditIcon
+                  onClick={() => actions.onEdit({ type, eachdata, headers })}
+                />
+                <DeleteIcon
+                  onClick={() => actions.onDelete({ type, eachdata, headers })} 
+                />
               </TableCell>
             </TableRow>
           ))}
