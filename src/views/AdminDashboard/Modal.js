@@ -9,26 +9,9 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import TextField from "@material-ui/core/TextField";
 
 function Modal(props) {
-  const {
-    activeOrganization,
-    setActiveOrganization,
-    handleSubmit,
-    action,
-    open,
-    setOpen,
-  } = props;
-
-  const handleChange = (e, key) => {
-    const target = e.target;
-
-    setActiveOrganization((prev) => ({
-      ...prev,
-      [key]: target.value,
-    }));
-  };
+  const { handleSubmit, action, open, setOpen, activeRecord, children } = props;
 
   return (
     <Dialog
@@ -37,93 +20,18 @@ function Modal(props) {
       open={open}
     >
       <DialogTitle id="customized-dialog-title" onClose={props.close}>
-        {`${action} Organization Details`}
+        {`${activeRecord.action} ${activeRecord.type}`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
           Please make the necessary edits to this specific organization.
         </DialogContentText>
-        {action === "View" && (
-          <img
-            src="https://source.unsplash.com/random"
-            alt="test title"
-            style={{ maxWidth: "100%" }}
-          />
-        )}
-        <form noValidate onSubmit={handleSubmit}>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Name"
-            type="text"
-            fullWidth
-            value={activeOrganization && activeOrganization.org_name}
-            onChange={(e) => handleChange(e, "org_name")}
-            InputProps={{
-              disabled: action === "View",
-            }}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
-            fullWidth
-            value={activeOrganization && activeOrganization.org_description}
-            onChange={(e) => handleChange(e, "org_description")}
-            InputProps={{
-              disabled: action === "View",
-            }}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="city"
-            label="City"
-            type="text"
-            fullWidth
-            value={activeOrganization && activeOrganization.org_city}
-            onChange={(e) => handleChange(e, "org_city")}
-            InputProps={{
-              disabled: action === "View",
-            }}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="country"
-            label="Country"
-            type="text"
-            fullWidth
-            value={activeOrganization && activeOrganization.org_country}
-            onChange={(e) => handleChange(e, "org_country")}
-            InputProps={{
-              disabled: action === "View",
-            }}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="picture"
-            label="Photo Link"
-            type="text"
-            fullWidth
-            value={activeOrganization && activeOrganization.org_picture}
-            onChange={(e) => handleChange(e, "org_picture")}
-            InputProps={{
-              disabled: action === "View",
-            }}
-          />
-          {["Add", "Edit"].includes(action) && (
-            <DialogActions>
-              <Button autoFocus onClick={handleSubmit} color="primary">
-                {action === "Add" ? "Add" : "Save changes"}
-              </Button>
-            </DialogActions>
-          )}
-        </form>
+        {children}
+        <DialogActions>
+          <Button autoFocus onClick={handleSubmit} color="primary">
+            {action === "Create" ? "Add" : "Save changes"}
+          </Button>
+        </DialogActions>
       </DialogContent>
     </Dialog>
   );

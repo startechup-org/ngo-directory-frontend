@@ -1,41 +1,26 @@
-import React, { useState } from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
-import CreateIcon from '@material-ui/icons/Create';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Modal from './Modal'
+import React from "react";
+import { Table as MUITable } from "@material-ui/core";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
+export default function Table(props) {
+  const { type, headers, data, actions } = props;
 
-export default function Datat(props) {
-  const { type, headers, data } = props;
-
-  // Active record
-  const [activeRecord, setActiveRecord] = useState(null);
-
-  // Set current action either "Add", "View", "Edit"
-  const [action, setAction] = useState(null);
-
-  // Modal state and action
-  const [open, setOpen] = useState(false);
-
-  //Api add user/org
-
-  //Api edit user/org
-
-  //Api delete user/org
- 
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {type}
       </Typography>
-      <span align="right"><AddIcon onClick={() => { setOpen(true) }}/></span>
-      <Table size="small">
+      <span align="right">
+        <AddIcon onClick={() => actions.onAdd()} />
+      </span>
+      <MUITable size="small">
         <TableHead>
           <TableRow>
             {headers.map((header) => (
@@ -45,48 +30,19 @@ export default function Datat(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {type === "Organizations" && (
-            data.map((eachdata) => {
-              return (
-                <TableRow key={eachdata._id}>
-                  <TableCell>{eachdata.org_name}</TableCell>
-                  <TableCell>{eachdata.org_description}</TableCell>
-                  <TableCell>{eachdata.org_city}</TableCell>
-                  <TableCell>{eachdata.org_country}</TableCell>
-                  <TableCell>
-                    <CreateIcon />
-                    <DeleteIcon />
-                  </TableCell>
-                </TableRow>
-              )
-           
-            })           
-          )}
-
-          {type === "Users" && (
-            data.map((eachdata) => {
-              return (
-                <TableRow key={eachdata._id}>
-                  <TableCell>{eachdata.username}</TableCell>
-                  <TableCell>{eachdata.name}</TableCell>
-                  <TableCell>{eachdata.email}</TableCell>
-                  <TableCell>{eachdata.language}</TableCell>
-                  <TableCell>{eachdata.country}</TableCell>
-                  <TableCell>
-                    <CreateIcon />
-                    <DeleteIcon />
-                  </TableCell>
-                </TableRow>
-              )
-            })           
-          )}
+          {data.map((eachdata) => (
+            <TableRow key={eachdata._id}>
+              {eachdata.map((val) => (
+                <TableCell>{val}</TableCell>
+              ))}
+              <TableCell>
+                <EditIcon />
+                <DeleteIcon />
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
-      </Table>
-      <br></br>
-      <Modal
-        open={open}
-        setOpen={setOpen}
-      />
+      </MUITable>
     </React.Fragment>
   );
 }
