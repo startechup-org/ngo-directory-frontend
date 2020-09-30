@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 
 import Header from "components/Header";
-import Footer from "components/Footer";
+// import Footer from "components/Footer";
 import LoginPage from "views/Login";
 import SignUpPage from "views/SignUp";
 import NgoListPage from "views/NGOList";
@@ -34,7 +34,7 @@ function App() {
           />
           <PublicRoute path="/" component={LoginPage} restricted="true" exact />
         </Switch>
-        <Footer />
+        {/* <Footer /> */}
       </AuthProvider>
     </Router>
   );

@@ -37,7 +37,7 @@ export default function Table(props) {
               {headers
                 .filter((header) => header && !header.hide)
                 .map((header) => (
-                  <TableCell key={`${eachdata._id}-${eachdata[header.key]}`}>{eachdata[header.key]}</TableCell>
+                  <TableCell key={`${header.key}-${eachdata._id}`}>{eachdata[header.key]}</TableCell>
                 ))}
               {/* {eachdata.map((val) => (
                 <TableCell>{val}</TableCell>
