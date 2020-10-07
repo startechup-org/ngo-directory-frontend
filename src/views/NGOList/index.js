@@ -57,6 +57,7 @@ export default function Album() {
 		try {
 			const response = await addOrganization(organization);
 			console.log('response edit: ', response.data);
+			return response;
 		} catch (error) {
 			console.log('err login: ', error);
 		}
@@ -91,6 +92,7 @@ export default function Album() {
 				org_picture,
 			});
 			console.log('response edit: ', response.data);
+			return response;
 		} catch (error) {
 			console.log('err login: ', error);
 		}
