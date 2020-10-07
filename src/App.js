@@ -18,7 +18,7 @@ function App() {
       <AuthProvider>
         <PublicRoute component={Header} />
         <Switch>
-          <PublicRoute path="/users" component={UserList} exact />
+          <PrivateRoute path="/users" component={UserList} exact />
           <PrivateRoute
             path="/admin"
             component={AdminDashboard}
