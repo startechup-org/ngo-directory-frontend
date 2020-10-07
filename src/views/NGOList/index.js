@@ -17,18 +17,12 @@ import {
 } from 'api/organization.api';
 import { useAuth } from '../../context/auth';
 
-export default function NGOList() {
+export default function Album() {
 	const classes = useStyles();
 	const { user, setUser, auth } = useAuth();
 	/* States */
 	const [organizations, setOrganizations] = useState([]);
 	const [managedOrganizations, setManagedOrganizations] = useState([]);
-
-	//set the state for other organization to be filtered
-	const otherOrganizations = organizations.filter(
-		(org) => !org?.admins?.includes(user._id)
-	);
-	console.log('otherOrganizations', otherOrganizations);
 
 	// Active organization
 	const [activeOrganization, setActiveOrganization] = useState(null);
@@ -43,17 +37,15 @@ export default function NGOList() {
 	useEffect(() => {
 		//side effects in react
 		const loadOrganizations = async () => {
-			// const headers = {
-			//   headers: { "Authorization": `Bearer ${auth.access_token}`}
-			// }
-			const response = await allOrganizations(auth.access_token); //how to async with
-			console.log('response111: ', response.data.data);
+			const response = await allOrganizations(auth.access_token); //how to async with useEffect
+			console.log('response: ', response.data.data); //so create a function with
 			setOrganizations(response.data.data);
 		};
 
-		//useAuth for user_id
+		//const user_id = localStorage.getItem("user_id");
 		const loadManagedOrgs = async () => {
 			const response = await managedOrganizationsByUser(user._id);
+			console.log('response: ', response.data.data);
 			setManagedOrganizations(response.data.data);
 		};
 
@@ -61,13 +53,12 @@ export default function NGOList() {
 		loadManagedOrgs();
 	}, [user._id, auth.access_token]);
 
-	const newOrganization = (organization) => {
+	const newOrganization = async (organization) => {
 		try {
-			const response = addOrganization(organization);
-			console.log('log: ', response);
-			return response;
+			const response = await addOrganization(organization);
+			console.log('response edit: ', response.data);
 		} catch (error) {
-			console.log('err: ', error);
+			console.log('err login: ', error);
 		}
 	};
 
@@ -138,6 +129,7 @@ export default function NGOList() {
 				...activeOrganization,
 			};
 			const newOrg = await newOrganization(new_org);
+			console.log('newOrg: ', newOrg);
 			setManagedOrganizations([activeOrganization, ...managedOrganizations]);
 			console.log('user: ', user);
 			await addUserAsOrgAdmin(user._id, {
@@ -157,12 +149,36 @@ export default function NGOList() {
 		return (
 			<OrganizationGrid
 				organizations={organizations}
-				onOpen={setOpen}
-				onSubmitEdit={handleSubmit}
-				setAction={setAction}
-				setActiveOrganization={setActiveOrganization}
+				cardActions={{
+					onView: handleView,
+					onEdit: handleEdit,
+				}}
 			/>
 		);
+	};
+
+	const handleAdd = () => {
+		setOpen(true);
+		setActiveOrganization({
+			org_name: '',
+			org_description: '',
+			org_city: '',
+			org_country: '',
+			org_picture: '',
+		});
+		setAction('Add');
+	};
+
+	const handleView = (organization) => {
+		setOpen(true);
+		setActiveOrganization(organization);
+		setAction('View');
+	};
+
+	const handleEdit = (organization) => {
+		setOpen(true);
+		setActiveOrganization(organization);
+		setAction('Edit');
 	};
 
 	return (
@@ -174,20 +190,7 @@ export default function NGOList() {
 					<Container maxWidth='sm'>
 						<Typography variant='h3' align='center' color='textPrimary'>
 							<span>NGO Directory</span>
-							<IconButton
-								aria-label='add'
-								onClick={() => {
-									setOpen(true);
-									setActiveOrganization({
-										org_name: '',
-										org_description: '',
-										org_city: '',
-										org_country: '',
-										org_picture: '',
-									});
-									setAction('Add');
-								}}
-							>
+							<IconButton aria-label='add' onClick={handleAdd}>
 								<AddCircleOutlinedIcon />
 							</IconButton>
 						</Typography>
@@ -231,7 +234,7 @@ export default function NGOList() {
 				action={action}
 				activeOrganization={activeOrganization}
 				setActiveOrganization={setActiveOrganization}
-				handleSubmit={handleSubmit}
+				onSubmit={handleSubmit}
 			/>
 		</React.Fragment>
 	);
