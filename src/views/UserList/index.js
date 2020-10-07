@@ -15,9 +15,11 @@ import {
   allUsers,
 } from "api/user.api";
 
+import { useAuth } from 'context/auth';
+
 export default function UserList() {
   const classes = useStyles();
-  
+  const { auth } = useAuth();
 /* States */
   
   const [users, setUsers] = useState([]);
@@ -26,12 +28,12 @@ export default function UserList() {
   useEffect(() => {
 	//side effects in react
     const loadUsers = async () => {
-      const response = await allUsers(); //how to async with 
+      const response = await allUsers(auth.access_token); //how to async with 
       console.log('response: ', response.data.data)
       setUsers(response.data.data);
     };
     loadUsers();
-  }, []);
+  }, [auth.access_token]);
 
   return (
     <React.Fragment>
