@@ -33,6 +33,12 @@ export default function Album() {
 	// Modal state and action
 	const [open, setOpen] = useState(false);
 
+	 //set the state for other organization to be filtered
+	const otherOrganizations = organizations.filter(
+        (org) => !org?.admins?.includes(user._id)
+    );
+    console.log('otherOrganizations', otherOrganizations);
+
 	// Load organizations
 	useEffect(() => {
 		//side effects in react
@@ -226,7 +232,7 @@ export default function Album() {
 						All Organizations
 					</Typography>
 					<br></br>
-					{renderOrganizationsGrid(organizations)}
+					{renderOrganizationsGrid(otherOrganizations)}
 				</Container>
 				{/* End Other Organizations*/}
 			</main>
