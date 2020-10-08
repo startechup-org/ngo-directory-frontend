@@ -223,7 +223,7 @@ export default function Album() {
 						color='textPrimary'
 						gutterBottom
 					>
-						Other Organizations
+						All Organizations
 					</Typography>
 					<br></br>
 					{renderOrganizationsGrid(organizations)}

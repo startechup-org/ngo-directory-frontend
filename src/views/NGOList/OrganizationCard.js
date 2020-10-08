@@ -8,11 +8,13 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { useAuth } from '../../context/auth';
 const OrganizationCard = (props) => {
 	const classes = useStyles();
 	const { organization, cardActions } = props;
 	const { onView: handleView, onEdit: handleEdit } = cardActions;
+	const { user } = useAuth();
+
 
 	return (
 		<>
@@ -37,14 +39,17 @@ const OrganizationCard = (props) => {
 						>
 							View
 						</Button>
-						<Button
-							size='small'
-							color='primary'
-							onClick={() => handleEdit(organization)}
-						>
-							{/* <Button size="small" color="primary" onClick={() => console.log("testing")}> */}
-							Edit
-						</Button>
+						{organization?.admins?.includes(user._id) && (
+									<Button
+									size='small'
+									color='primary'
+									onClick={() => handleEdit(organization)}
+								>
+									{/* <Button size="small" color="primary" onClick={() => console.log("testing")}> */}
+									Edit
+								</Button>
+						)}
+				
 					</CardActions>
 				</Card>
 			</Grid>
